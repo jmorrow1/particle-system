@@ -6,6 +6,8 @@
 #include <SFML/OpenGL.hpp>
 #include <SFML/Main.hpp>
 #include "ParticleSystem.h"
+#include "LinearVelocity.h"
+#include "LinearScale.h"
 
 #include <iostream>
 
@@ -19,14 +21,17 @@ int main()
 	RenderWindow window(VideoMode(800, 600), "Particles");
 	Clock clock = Clock();
 
-	Texture* particleTexture = new Texture();
-	particleTexture->loadFromFile("Assets/banana.png");
-	ParticleSystem* system = new ParticleSystem(400, 300, 20.0f, 0, 6.28f, 50, particleTexture);
+	Texture* bananaTexture = new Texture();
+	bananaTexture->loadFromFile("Assets/banana.png");
 
-	RectangleShape shape;
-	shape.setTexture(particleTexture);
-	shape.setPosition(400, 300);
-	shape.setSize(Vector2<float>(20, 20));
+	Texture* cabbageTexture = new Texture();
+	cabbageTexture->loadFromFile("Assets/cabbage.png");
+
+	ParticleSystem* bananaSystem = new ParticleSystem(200, 300, 20.0f,
+		3, 6, 50, bananaTexture, new LinearVelocity(0.05, 0.5));
+
+	ParticleSystem* cabbageSystem = new ParticleSystem(600, 300, 20.0f,
+		0, 6.28, 25, cabbageTexture, new LinearScale(5, 50));
 
 	// run
 	while (window.isOpen())
@@ -46,16 +51,18 @@ int main()
 		if (dt >= SPF)
 		{
 			clock.restart();
-			system->update(dt);
+			bananaSystem->update(dt);
+			cabbageSystem->update(dt);
 
 			window.clear();
-			system->draw(window);
+			bananaSystem->draw(window);
+			cabbageSystem->draw(window);
 
 			window.display();
 		}
 	}
 
-	delete particleTexture;
+	delete bananaTexture;
 
 	return 0;
 }

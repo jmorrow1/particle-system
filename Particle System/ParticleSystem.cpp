@@ -2,7 +2,8 @@
 #include <iostream>
 
 ParticleSystem::ParticleSystem(float emissionPtX, float emissionPtY, float emissionSpeed,
-	float minEmissionAngle, float maxEmissionAngle, float particlesPerSecond, Texture* texture)
+	float minEmissionAngle, float maxEmissionAngle, float particlesPerSecond, 
+	Texture* texture, Strategy* strategy)
 {
 	this->emissionPoint = *new Vector2<float>(emissionPtX, emissionPtY);
 	this->emissionSpeed = emissionSpeed;
@@ -10,6 +11,7 @@ ParticleSystem::ParticleSystem(float emissionPtX, float emissionPtY, float emiss
 	this->maxEmissionAngle = maxEmissionAngle;
 	this->particlesPerSecond = particlesPerSecond;
 	this->texture = texture;
+	this->strategy = strategy;
 }
 
 ParticleSystem::~ParticleSystem()
@@ -31,10 +33,10 @@ void ParticleSystem::update(float dt)
 		float vy = emissionSpeed * sin(emissionAngle);
 		RectangleShape rectShape = RectangleShape();
 		rectShape.setTexture(texture);
-		rectShape.setSize(Vector2<float>(30, 30));
+		rectShape.setSize(Vector2<float>(50, 50));
 		float lifespan = random(1, 5);
 
-		Particle p = Particle(lifespan, emissionPoint.x, emissionPoint.y, vx, vy, rectShape);
+		Particle p = Particle(lifespan, emissionPoint.x, emissionPoint.y, vx, vy, rectShape, 0, 0);
 		particles.push_back(p);
 	}
 
@@ -43,6 +45,7 @@ void ParticleSystem::update(float dt)
 	{
 		if (particles[i].isAlive())
 		{
+			strategy->execute(&particles[i]);
 			particles[i].update(dt);
 		}
 		

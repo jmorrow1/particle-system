@@ -13,20 +13,19 @@ using namespace sf;
 class Particle
 {
 private:
+	
+	
+public:
 	RectangleShape rectShape;
 	Vector2<float> pos;
 	Vector2<float> vel;
 	float rotation;
 	float angularSpeed;
-	Color color;
-	float fadeOutSpeed;
 	float life;
-	
-public:
+	float lifespan;
+
 	Particle(float lifespan, float x, float y, float vx, float vy,
 		RectangleShape rectShape, float rotation, float angularSpeed);
-	Particle(float lifespan, float x, float y, float vx, float vy, 
-		RectangleShape rectShape, float rotation, float angularSpeed, float fadeOutSpeed);
 	~Particle();
 	void update(float dt);
 	void draw(RenderWindow& window);
